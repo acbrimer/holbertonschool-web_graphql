@@ -4,6 +4,7 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLID,
+  GraphQLList,
 } = require('graphql');
 const lodash = require('lodash');
 
@@ -14,7 +15,7 @@ const tasks_data = [
     weight: 1,
     description:
       'Create your first HTML file 0-index.html with: -Add the doctype on the first line (without any comment) -After the doctype, open and close a html tag Open your file in your browser (the page should be blank)',
-    projectId: 1,
+    projectId: '1',
   },
   {
     id: '2',
@@ -22,7 +23,7 @@ const tasks_data = [
     weight: 1,
     description:
       'Copy the content of 0-index.html into 1-index.html Create the head and body sections inside the html tag, create the head and body tags (empty) in this order',
-    projectId: 1,
+    projectId: '1',
   },
 ];
 
@@ -50,6 +51,11 @@ const TaskType = new GraphQLObjectType({
     title: { type: GraphQLString },
     weight: { type: GraphQLInt },
     description: { type: GraphQLString },
+    project: {
+      type: TaskType,
+      resolve: (parent, args) =>
+        lodash.find(projects_data, { id: parent.projectId }),
+    },
   }),
 });
 
@@ -60,6 +66,11 @@ const ProjectType = new GraphQLObjectType({
     title: { type: GraphQLString },
     weight: { type: GraphQLInt },
     description: { type: GraphQLString },
+    tasks: {
+      type: new GraphQLList(TaskType),
+      resolve: (parent, args) =>
+        lodash.filter(tasks_data, { projectId: parent.id }),
+    },
   }),
 });
 
@@ -69,12 +80,12 @@ const RootQuery = new GraphQLObjectType({
     task: {
       type: TaskType,
       args: { id: { type: GraphQLString } },
-      resolve: (parent, args) => lodash.find(tasks, { id: args.id }),
+      resolve: (parent, args) => lodash.find(tasks_data, { id: args.id }),
     },
     project: {
       type: ProjectType,
       args: { id: { type: GraphQLString } },
-      resolve: (parent, args) => lodash.find(projects, { id: args.id }),
+      resolve: (parent, args) => lodash.find(projects_data, { id: args.id }),
     },
   }),
 });
