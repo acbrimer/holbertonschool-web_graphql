@@ -87,6 +87,14 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLString } },
       resolve: (parent, args) => lodash.find(projects_data, { id: args.id }),
     },
+    tasks: {
+      type: new GraphQLList(TaskType),
+      resolve: () => tasks_data,
+    },
+    projects: {
+      type: new GraphQLList(ProjectType),
+      resolve: () => projects_data,
+    },
   }),
 });
 
