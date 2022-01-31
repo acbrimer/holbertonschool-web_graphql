@@ -1,3 +1,6 @@
+# Connection string export for mongo atlas
+*mongoConnectionString*
+
 # Logs
 logs
 *.log
