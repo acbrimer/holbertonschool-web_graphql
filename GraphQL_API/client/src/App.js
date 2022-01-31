@@ -7,7 +7,7 @@ import AddTask from './components/AddTask';
 import AddProject from './components/AddProject';
 // apollo client setup
 
-const client = new ApolloClient({ uri: 'http://localhost:4000' });
+const client = new ApolloClient({ uri: 'http://localhost:4000/graphql' });
 
 function App() {
   return (
